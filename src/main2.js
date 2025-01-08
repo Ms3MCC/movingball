@@ -50,13 +50,13 @@ const params = {
 };
 
 // Bind sphere position controls
-pane.addBinding(params, "positionX", { min: -10, max: 10, step: 0.1 }).on("change", (ev) => {
+pane.addBinding(params, "positionX", { min: -10, max: 12, step: 0.1 }).on("change", (ev) => {
     sphere.position.x = ev.value;
 });
-pane.addBinding(params, "positionY", { min: -10, max: 10, step: 0.1 }).on("change", (ev) => {
+pane.addBinding(params, "positionY", { min: -10, max: 12, step: 0.1 }).on("change", (ev) => {
     sphere.position.y = ev.value;
 });
-pane.addBinding(params, "positionZ", { min: -10, max: 10, step: 0.1 }).on("change", (ev) => {
+pane.addBinding(params, "positionZ", { min: -10, max: 12, step: 0.1 }).on("change", (ev) => {
     sphere.position.z = ev.value;
 });
 
