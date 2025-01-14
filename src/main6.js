@@ -1,3 +1,4 @@
+
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Pane } from "tweakpane";
@@ -102,25 +103,97 @@ pane.addBinding(params, "color").on("change", (ev) => {
     mesh.material.color.set(ev.value);
 });
 
-pane.addBinding(params, "rotationX", { min: 0, max: Math.PI * 2, step: 0.01 }).on("change", (ev) => {
+pane.addBinding(params, "rotationX", { min: -Math.PI * 2, max: Math.PI * 2, step: 0.01 }).on("change", (ev) => {
     mesh.rotation.x = ev.value;
 });
-pane.addBinding(params, "rotationY", { min: 0, max: Math.PI * 2, step: 0.01 }).on("change", (ev) => {
+pane.addBinding(params, "rotationY", { min: -Math.PI * 2, max: Math.PI * 2, step: 0.01 }).on("change", (ev) => {
     mesh.rotation.y = ev.value;
 });
-pane.addBinding(params, "rotationZ", { min: 0, max: Math.PI * 2, step: 0.01 }).on("change", (ev) => {
+pane.addBinding(params, "rotationZ", { min: -Math.PI * 2, max: Math.PI * 2, step: 0.01 }).on("change", (ev) => {
     mesh.rotation.z = ev.value;
 });
-
-
-
 
 // Raycaster and mouse
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let isDragging = false;
 
-// Event listeners for mouse interactions
+// Define movement speed
+const moveSpeed = 0.1;
+const rotationSpeed = 0.05;
+// Track keys pressed
+const keysPressed = {};
+
+// Event listeners for keydown and keyup
+document.addEventListener("keydown", (event) => {
+    keysPressed[event.key] = true;
+});
+
+document.addEventListener("keyup", (event) => {
+    keysPressed[event.key] = false;
+});
+document.addEventListener("keydown", (event) => {
+    console.log("Keydown event detected:", event.key);
+});
+
+
+// Keyboard movement logic
+function handleKeyboardMovement() {
+    // Move along the XZ plane
+    if (keysPressed["ArrowUp"]) {
+        mesh.position.z -= moveSpeed; // Move forward
+    }
+    if (keysPressed["ArrowDown"]) {
+        mesh.position.z += moveSpeed; // Move backward
+    }
+    if (keysPressed["ArrowLeft"]) {
+        mesh.position.x -= moveSpeed; // Move left
+    }
+    if (keysPressed["ArrowRight"]) {
+        mesh.position.x += moveSpeed; // Move right
+    }
+
+    // Move along the Y-axis
+    if (keysPressed[" "]) {
+        mesh.position.y += moveSpeed; // Move up (Space key)
+    }
+    if (keysPressed["Shift"]) {
+        mesh.position.y -= moveSpeed; // Move down (Shift key)
+    }
+
+    // rotation
+    if (keysPressed["w"]) {
+        mesh.rotation.x -= rotationSpeed;
+    }
+    if ( keysPressed["s"]) {
+        mesh.rotation.x += rotationSpeed;  
+    }
+    if (keysPressed["a"]) {
+        mesh.rotation.y -= rotationSpeed;
+    }
+    if (keysPressed["d"]) {
+        mesh.rotation.y += rotationSpeed; 
+    }
+    if (keysPressed["q"]) {
+        mesh.rotation.z -= rotationSpeed; 
+    }
+    if (keysPressed["e"]) {
+        mesh.rotation.z += rotationSpeed; 
+    }
+
+
+
+    // Update Tweakpane values
+    params.positionX = mesh.position.x;
+    params.positionY = mesh.position.y;
+    params.positionZ = mesh.position.z;
+    params.rotationX = mesh.rotation.x;
+    params.rotationY = mesh.rotation.y;
+    params.rotationZ = mesh.rotation.z;
+    pane.refresh(); // Refresh pane to reflect updated values
+}
+
+// Event listeners for mouse interactions (dragging)
 canvas.addEventListener("mousedown", (event) => {
     isDragging = true;
     controls.enabled = false; // Disable OrbitControls while dragging
@@ -162,6 +235,10 @@ canvas.addEventListener("mousemove", (event) => {
 // Animation loop
 function animate() {
     requestAnimationFrame(animate);
+
+    // Handle keyboard movement
+    handleKeyboardMovement();
+
     controls.update();
     renderer.render(scene, camera);
 }
