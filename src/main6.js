@@ -88,13 +88,13 @@ pane.addBinding(params, "geometry", {
 });
 
 // Bind mesh position controls
-pane.addBinding(params, "positionX", { min: -14, max: 14, step: 0.1 }).on("change", (ev) => {
+pane.addBinding(params, "positionX", { min: -100, max: 100, step: 0.1 }).on("change", (ev) => {
     mesh.position.x = ev.value;
 });
-pane.addBinding(params, "positionY", { min: -14, max: 14, step: 0.1 }).on("change", (ev) => {
+pane.addBinding(params, "positionY", { min: -100, max: 100, step: 0.1 }).on("change", (ev) => {
     mesh.position.y = ev.value;
 });
-pane.addBinding(params, "positionZ", { min: -14, max: 15, step: 0.1 }).on("change", (ev) => {
+pane.addBinding(params, "positionZ", { min: -100, max: 100, step: 0.1 }).on("change", (ev) => {
     mesh.position.z = ev.value;
 });
 
@@ -125,16 +125,35 @@ const rotationSpeed = 0.05;
 const keysPressed = {};
 
 // Event listeners for keydown and keyup
+// document.addEventListener("keydown", (event) => {
+//     keysPressed[event.key] = true;
+//     event.preventDefault();
+//     console.log("Keydown event detected:", event.key);
+// });
+
 document.addEventListener("keydown", (event) => {
+    // List of keys that should not trigger preventDefault (like F12, F1, and others used for dev tools)
+    const devToolsKeys = [
+        "F12", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11",
+        "Control", "Shift", "I", "i", 
+        "Meta", // Command key on macOS
+        "Option", // Option key on macOS
+        "C","c" // To allow "Option + Command + C" on macOS
+    ];
+
+    // Prevent default behavior for movement keys, but not dev tools keys
+    if (!devToolsKeys.includes(event.key) && !(event.metaKey || event.altKey)) {
+        event.preventDefault();
+    }
+
     keysPressed[event.key] = true;
+    console.log("Keydown event detected:", event.key);
 });
 
 document.addEventListener("keyup", (event) => {
     keysPressed[event.key] = false;
 });
-document.addEventListener("keydown", (event) => {
-    console.log("Keydown event detected:", event.key);
-});
+
 
 
 // Keyboard movement logic
