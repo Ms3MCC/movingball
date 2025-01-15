@@ -5,7 +5,7 @@ import { Pane } from "tweakpane";
 
 // Create a scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color("black");
+scene.background = new THREE.Color("white");
 
 // Setup a camera
 const camera = new THREE.PerspectiveCamera(
@@ -28,7 +28,7 @@ scene.add(ambientLight);
 
 // Default geometry and material
 let currentGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+const material = new THREE.MeshStandardMaterial({ color: 0xff0000});
 let mesh = new THREE.Mesh(currentGeometry, material);
 scene.add(mesh);
 
@@ -138,7 +138,7 @@ document.addEventListener("keydown", (event) => {
         "Control", "Shift", "I", "i", 
         "Meta", // Command key on macOS
         "Option", // Option key on macOS
-        "C","c" // To allow "Option + Command + C" on macOS
+        "C","c","0","1","2","3","4","5","6","7","8","9",".","Delete", "Enter", "Backspace"  // To allow "Option + Command + C" on macOS
     ];
 
     // Prevent default behavior for movement keys, but not dev tools keys
